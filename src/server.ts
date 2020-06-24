@@ -8,7 +8,7 @@ import socketio from 'socket.io';
 import { IConfig } from '../src/utils/general/AppSettings';
 import socketMain from './socket-main';
 
-const config = require('./configs/server-settings.json');
+const config = require('../configs/server-settings.json');
 
 export const os_data = OsData.getInstance();
 
@@ -56,7 +56,10 @@ const Server = () => {
         workers[worker_index(connection.remoteAddress!, num_processes!)];
       worker.send('sticky-session:connection', connection);
     });
+    server.listen(_config.port);
+    console.log(`Master listening on ${_config.host} : ${_config.port}`);
   } else {
+    console.log('here');
     let app = express();
     // Not exposing our internal server to outside world
     const server = app.listen(0, 'localhost');
@@ -65,6 +68,26 @@ const Server = () => {
 
     // Tell socket.io to use the redis adapter. the redis server is assumed to be at localhost:6379
     io.adapter(io_redis({ host: 'localhost', port: 6379 }));
+
+    // Here you might use Socket.IO middleware for authorization etc.
+    // on connection, send the socket over to our module with socket stuff
+    io.on('connection', function (socket) {
+      socketMain(io, socket);
+      console.log(`connected to worker: ${cluster.worker.id}`);
+    });
+    socketMain(io, null);
+
+    // Listen to messages sent from the master
+    process.on('message', function (message, connection) {
+      if (message !== 'sticky-session:connection') {
+        return;
+      }
+      // Emulate a connection event on the server by emitting the
+      // event with the connection the master sent us.
+      server.emit('connection', connection);
+
+      connection.resume();
+    });
   }
 };
 
