@@ -11,7 +11,7 @@ import socketMain from './socket-main';
 const config = require('../configs/server-settings.json');
 
 export const os_data = OsData.getInstance();
-
+os_data.updateData();
 const num_processes = os_data.numOfCores;
 const _config = config as IConfig;
 
@@ -32,7 +32,6 @@ const Server = () => {
         spawn(i);
       });
     };
-
     // Spawn workers
     for (let i = 0; i < num_processes!; i++) {
       spawn(i);
@@ -59,7 +58,6 @@ const Server = () => {
     server.listen(_config.port);
     console.log(`Master listening on ${_config.host} : ${_config.port}`);
   } else {
-    console.log('here');
     let app = express();
     // Not exposing our internal server to outside world
     const server = app.listen(0, 'localhost');
