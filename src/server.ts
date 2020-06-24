@@ -73,7 +73,6 @@ const Server = () => {
       socketMain(io, socket);
       console.log(`connected to worker: ${cluster.worker.id}`);
     });
-    socketMain(io, null);
 
     // Listen to messages sent from the master
     process.on('message', function (message, connection) {
