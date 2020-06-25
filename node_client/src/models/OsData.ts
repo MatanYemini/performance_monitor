@@ -96,6 +96,7 @@ export class OsData implements IOsData {
     return new Promise(async (resolve, reject) => {
       this.updateData();
       this.cpuLoad = await this.getCpuLoad();
+      console.log({ ...this });
       resolve(this);
     });
   }
