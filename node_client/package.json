@@ -1,0 +1,26 @@
+{
+  "name": "node_client",
+  "version": "1.0.0",
+  "description": "Node client for performance monitoring",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node index.ts"
+  },
+  "author": "Matan Yemini",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.0.14"
+  },
+  "dependencies": {
+    "@types/socket.io-client": "^1.4.33",
+    "farmhash": "^3.1.0",
+    "module-alias": "^2.2.2",
+    "socket.io-client": "^2.3.0"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@utils": "./build/src/utils",
+    "@configs": "./build/configs"
+  }
+}

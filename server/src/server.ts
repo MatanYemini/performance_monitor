@@ -1,18 +1,14 @@
 import express from 'express';
-import { OsData } from './utils/OsData';
 import cluster from 'cluster';
 import farmhash from 'farmhash';
 import io_redis from 'socket.io-redis';
 import net from 'net';
 import socketio from 'socket.io';
-import { IConfig } from '../src/utils/general/AppSettings';
 import socketMain from './socket-main';
-
+import { IConfig } from './utils/general/AppSettings';
+const num_processes = require('os').cpus().length;
 const config = require('../configs/server-settings.json');
 
-export const os_data = OsData.getInstance();
-os_data.updateData();
-const num_processes = os_data.numOfCores;
 const _config = config as IConfig;
 
 type Worker = cluster.Worker;

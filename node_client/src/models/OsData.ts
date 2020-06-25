@@ -5,9 +5,23 @@ interface ICpuAvg {
   total: number;
 }
 
-export class OsData {
+interface IOsData {
+  osType: string;
+  upTime?: number;
+  freemem?: number;
+  totalmem?: number;
+  usedMem?: number;
+  memUsage?: number;
+  cpuModal?: Object;
+  numOfCores?: number;
+  cpuSpeed?: number;
+  cpus?: os.CpuInfo[];
+  cpuLoad?: number;
+}
+
+export class OsData implements IOsData {
   private static _instance: OsData;
-  private _osType: string;
+  public osType: string;
   public upTime?: number;
   public freemem?: number;
   public totalmem?: number;
@@ -16,10 +30,11 @@ export class OsData {
   public cpuModal?: Object;
   public numOfCores?: number;
   public cpuSpeed?: number;
-  public _cpus?: os.CpuInfo[];
+  public cpus?: os.CpuInfo[];
+  public cpuLoad?: number;
 
   private constructor() {
-    this._osType = os.type() == 'Darwin' ? 'Mac' : os.type();
+    this.osType = os.type() == 'Darwin' ? 'Mac' : os.type();
   }
 
   public static getInstance(): OsData {
@@ -30,15 +45,11 @@ export class OsData {
     return OsData._instance;
   }
 
-  public get osType(): string {
-    return this._osType;
-  }
-
   public cpuAvarge(): ICpuAvg {
     let idleMs = 0;
     let totalMs = 0;
 
-    this._cpus?.forEach((aCore) => {
+    this.cpus?.forEach((aCore) => {
       idleMs += aCore.times.idle;
       totalMs +=
         aCore.times.user +
@@ -48,8 +59,8 @@ export class OsData {
         aCore.times.idle;
     });
     return {
-      idle: idleMs / this._cpus!.length,
-      total: totalMs / this._cpus!.length,
+      idle: idleMs / this.cpus!.length,
+      total: totalMs / this.cpus!.length,
     };
   }
 
@@ -70,14 +81,22 @@ export class OsData {
   }
 
   public updateData(): void {
-    this._cpus = os.cpus();
+    this.cpus = os.cpus();
     this.upTime = os.uptime();
     this.freemem = os.freemem();
     this.totalmem = os.totalmem();
     this.usedMem = this.totalmem - this.freemem;
     this.memUsage = Math.floor((this.usedMem / this.totalmem) * 100) / 100;
-    this.cpuModal = this._cpus[0].model;
-    this.numOfCores = this._cpus.length;
-    this.cpuSpeed = this._cpus[0].speed;
+    this.cpuModal = this.cpus[0].model;
+    this.numOfCores = this.cpus.length;
+    this.cpuSpeed = this.cpus[0].speed;
+  }
+
+  public performanceData(): Promise<IOsData> {
+    return new Promise(async (resolve, reject) => {
+      this.updateData();
+      this.cpuLoad = await this.getCpuLoad();
+      resolve(this);
+    });
   }
 }
