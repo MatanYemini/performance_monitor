@@ -1,3 +1,3 @@
 {
-  "mongoUri": "mongodb://127.0.0.1/perfData"
+  "mongoUri": "mongodb+srv://Yemini:316386366@clusternode-gbgoy.mongodb.net/perfData?retryWrites=true&w=majority"
 }

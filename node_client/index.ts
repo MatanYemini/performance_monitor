@@ -12,9 +12,10 @@ const _config = config as IConfig;
 const socket = io(`${_config.host}:${_config.port}`);
 
 socket.on('connect', () => {
+  console.log('conneted');
   // Identify this machine
   const net_inter = os.networkInterfaces();
-  let macA;
+  let macA: any;
   // Find a non internal network interface
   for (let key in net_inter) {
     if (!net_inter[key]![0].internal) {
@@ -25,15 +26,28 @@ socket.on('connect', () => {
 
   // Auth as node client - as node client
   socket.emit('clientAuth', _config.type);
-
+  os_data.performanceData().then((performance_data) => {
+    let performance_to_send: any = performance_data;
+    [performance_to_send.cpus, performance_to_send.cpuModal] = [
+      performance_data.cpus?.length,
+      performance_data.cpuModal?.toString(),
+    ];
+    socket.emit('initPerfData', {
+      data: performance_data,
+      macA: macA['address'],
+    });
+  });
   let performance_interval = setInterval(() => {
     os_data.performanceData().then((performance_data) => {
       let performance_to_send: any = performance_data;
-      [performance_to_send.cpus, performance_to_send.modal] = [
+      [performance_to_send.cpus, performance_to_send.cpuModal] = [
         performance_data.cpus?.length,
         performance_data.cpuModal?.toString(),
       ];
-      socket.emit('prefData', performance_data);
+      socket.emit('prefData', {
+        data: performance_data,
+        macA: macA['address'],
+      });
     });
   }, 1000);
 

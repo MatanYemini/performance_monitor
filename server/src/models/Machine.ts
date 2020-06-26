@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 // An interface that describes the properties
 // that are requried to create a operating system data
 interface MachineAttr {
+  macA: string;
   osType: string;
   upTime?: number;
   freemem?: number;
@@ -25,6 +26,7 @@ interface MachineModal extends mongoose.Model<MachineDoc> {
 // An interface that describes the properties
 // that a User Document has
 interface MachineDoc extends mongoose.Document {
+  macA: String;
   osType: String;
   upTime: Number;
   freemem: Number;
@@ -40,6 +42,7 @@ interface MachineDoc extends mongoose.Document {
 
 const machineSchema = new mongoose.Schema(
   {
+    macA: String,
     osType: String,
     upTime: Number,
     freemem: Number,
