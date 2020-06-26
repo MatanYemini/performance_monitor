@@ -1,7 +1,7 @@
 import socketio from 'socket.io';
 import mongoose from 'mongoose';
 import { Client, IMongoConfig } from './utils/general/AppSettings';
-import Machine from './models/Machine';
+import { Machine } from './models/Machine';
 const m_config = require('../configs/mongo-settings.json');
 type SocketServer = socketio.Server;
 type Socket = socketio.Socket;
@@ -26,6 +26,6 @@ export default function socketMain(io: SocketServer, socket: Socket) {
     }
   });
   socket?.on('prefData', (data) => {
-    console.log(data);
+    D(data);
   });
 }
