@@ -38,6 +38,8 @@ socket.on('connect', () => {
       performance_data.cpus?.length,
       performance_data.cpuModal?.toString(),
     ];
+    performance_to_send.isActive =
+      performance_data && performance_data.cpuLoad! > 0;
     socket.emit('initPerfData', {
       data: performance_data,
       macA: macA['address'],
@@ -50,6 +52,8 @@ socket.on('connect', () => {
         performance_data.cpus?.length,
         performance_data.cpuModal?.toString(),
       ];
+      performance_to_send.isActive =
+        performance_data && performance_data.cpuLoad! > 0;
       socket.emit('prefData', {
         data: performance_data,
         macA: macA['address'],

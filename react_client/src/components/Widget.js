@@ -17,7 +17,9 @@ export const Widget = (props) => {
     cpuSpeed,
     cpus,
     cpuLoad,
+    isActive,
   } = props.data;
+  console.log(isActive);
   const cpuWidgetId = `cpu-widget-${macA}`;
   const memWidgetId = `mem-widget-${macA}`;
   const cpu = { cpuLoad, cpuWidgetId };

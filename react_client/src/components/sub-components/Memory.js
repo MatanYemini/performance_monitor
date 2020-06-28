@@ -5,11 +5,10 @@ export const Memory = (props) => {
   const { totalmem, usedMem, memUsage, freemem, memWidgetId } = props.memData;
   const canvas = document.querySelector(`.${props.memData.memWidgetId}`);
   drawCircle(canvas, memUsage * 100);
-  console.log(memUsage);
   const totalMemInGB = (((totalmem / 1073741824) * 100) / 100).toFixed(2);
   const freeMemInGB = Math.floor((freemem / 1073741824) * 100) / 100;
   return (
-    <div class='col-sm-3 mem'>
+    <div className='col-sm-3 mem'>
       <h3>Memory Useage</h3>
       <div className='canvas-wrapper'>
         <canvas
