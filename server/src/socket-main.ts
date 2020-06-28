@@ -22,7 +22,8 @@ export default function socketMain(io: SocketServer, socket: Socket) {
     if (type == 'node_client') {
       socket.join('clients');
     } else if (type == 'react_client') {
-      // React client has joined
+      socket.join('ui');
+      console.log('react client has joined!');
     } else {
       // Invalid client has joined -> goodbye!.
       socket.disconnect(true);
@@ -40,7 +41,7 @@ export default function socketMain(io: SocketServer, socket: Socket) {
     }
   });
   socket?.on('prefData', (data) => {
-    // console.log(data);
+    io.to('ui').emit('data', data);
   });
 }
 
