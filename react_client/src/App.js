@@ -32,7 +32,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.performanceData);
     let widgets = [];
     const data = this.state.performanceData;
     // grab each machine, by property, from data

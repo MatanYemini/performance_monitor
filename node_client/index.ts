@@ -9,6 +9,7 @@ os_data.updateData();
 const num_processes = os_data.numOfCores;
 const _config = config as IConfig;
 
+const MAC_DEFAULT = '00:00:00:00:00:00';
 const socket = io(`${_config.host}:${_config.port}`);
 
 socket.on('connect', () => {
@@ -19,6 +20,11 @@ socket.on('connect', () => {
   // Find a non internal network interface
   for (let key in net_inter) {
     if (!net_inter[key]![0].internal) {
+      if (net_inter[key]![0].mac === MAC_DEFAULT) {
+        macA = Math.random().toString(36).substr(2, 15);
+      } else {
+        macA = net_inter[key]![0].mac;
+      }
       macA = net_inter[key]![0];
       break;
     }
