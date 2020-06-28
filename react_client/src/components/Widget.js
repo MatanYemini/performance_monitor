@@ -1,7 +1,7 @@
 import React from 'react';
 import Cpu from './sub-components/Cpu';
 import { Memory } from './sub-components/Memory';
-import { Info } from './sub-components/Info';
+import Info from './sub-components/Info';
 
 export const Widget = (props) => {
   const {
@@ -18,8 +18,10 @@ export const Widget = (props) => {
     cpus,
     cpuLoad,
   } = props.data;
-  const cpu = { cpuLoad };
-  const mem = { totalmem, usedMem, memUsage, freemem };
+  const cpuWidgetId = `cpu-widget-${macA}`;
+  const memWidgetId = `mem-widget-${macA}`;
+  const cpu = { cpuLoad, cpuWidgetId };
+  const mem = { totalmem, usedMem, memUsage, freemem, memWidgetId };
   const info = { macA, osType, upTime, cpuModal, numOfCores, cpuSpeed };
 
   return (
